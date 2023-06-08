@@ -27,12 +27,19 @@ async function run() {
 
 
     const classesCollection = client.db("PhotographDB").collection("Classes");
-
+    const selectedCollection = client.db("PhotographDB").collection("selects");
 
     app.get('/class', async(req,res) =>{
         const result = await classesCollection.find().toArray();
         result.sort((a, b) => b.numStudents - a.numStudents);
         res.send(result);
+    });
+
+    app.post('/selects', async (req, res) => {
+      const item = req.body;
+      console.log(item);
+      const result = await selectedCollection.insertOne(item);
+      res.send(result);
     })
 
     // Send a ping to confirm a successful connection
