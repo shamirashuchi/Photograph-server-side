@@ -25,7 +25,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-
+    const usersCollection = client.db("PhotographDB").collection("users");
     const classesCollection = client.db("PhotographDB").collection("Classes");
     const selectedCollection = client.db("PhotographDB").collection("selects");
 
