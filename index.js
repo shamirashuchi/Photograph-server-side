@@ -76,7 +76,7 @@ async function run() {
       if (email !== decodedEmail) {
         return res.status(403).send({ error: true, message: 'porviden access' })
       }
-      
+
       const query = { email: email };
       const result = await selectedCollection.find(query).toArray();
       res.send(result);
@@ -107,6 +107,33 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await selectedCollection.deleteOne(query);
+      res.send(result);
+    })
+
+
+    app.get('/users/admin/:email', verifyJWT, async (req, res) => {
+      const email = req.params.email;
+
+      if (req.decoded.email !== email) {
+        res.send({ admin: false })
+      }
+
+      const query = { email: email }
+      const user = await usersCollection.findOne(query);
+      const result = { admin: user?.role === 'admin' }
+      res.send(result);
+    })
+
+    app.get('/users/instructor/:email', verifyJWT, async (req, res) => {
+      const email = req.params.email;
+
+      if (req.decoded.email !== email) {
+        res.send({ instructor: false })
+      }
+
+      const query = { email: email }
+      const user = await usersCollection.findOne(query);
+      const result = { instructor: user?.role === 'instructor' }
       res.send(result);
     })
 
