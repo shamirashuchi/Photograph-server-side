@@ -248,6 +248,21 @@ async function run() {
 
     })
 
+    app.patch('/class/dec/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          availableSeats: -1
+        },
+      };
+
+      const result = await classesCollection.updateOne(filter, updateDoc);
+      res.send(result);
+
+    })
+
 
       
       app.post('/create-payment-intent', verifyJWT, async (req, res) => {
