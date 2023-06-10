@@ -88,11 +88,28 @@ async function run() {
 
       const decodedEmail = req.decoded.email;
       if (email !== decodedEmail) {
-        return res.status(403).send({ error: true, message: 'porviden access' })
+        return res.status(403).send({ error: true, message: 'forviden access' })
       }
 
       const query = { email: email };
       const result = await selectedCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    app.get('/paymentinfo',verifyJWT,async (req, res) => {
+      const email = req.query.email;
+      console.log(email);
+      if (!email) {
+        res.send([]);
+      }
+
+      const decodedEmail = req.decoded.email;
+      if (email !== decodedEmail) {
+        return res.status(403).send({ error: true, message: 'forviden access' })
+      }
+
+      const query = { email: email };
+      const result = await paymentCollection.find(query).toArray();
       res.send(result);
     });
 
@@ -202,7 +219,7 @@ async function run() {
     })
 
 
-      // create payment intent
+      
       app.post('/create-payment-intent', verifyJWT, async (req, res) => {
         const { price } = req.body;
         const amount = parseInt(price * 100);
