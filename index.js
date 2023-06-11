@@ -110,6 +110,8 @@ async function run() {
 
       const query = { email: email };
       const result = await paymentCollection.find(query).toArray();
+      result.sort((a, b) => new Date(b.date) - new Date(a.date));
+
       res.send(result);
     });
 
