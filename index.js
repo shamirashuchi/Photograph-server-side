@@ -253,16 +253,41 @@ async function run() {
       console.log(id);
       const filter = { _id: new ObjectId(id) };
       const updateDoc = {
-        $set: {
-          availableSeats: -1
+        $inc: {
+          availableSeats:-1
         },
       };
 
       const result = await classesCollection.updateOne(filter, updateDoc);
+      console.log(result);
       res.send(result);
 
     })
 
+
+
+//     app.patch('/class/dec/:id', async (req, res) => {
+//   const id = req.params.id;
+//   console.log(id);
+//   const filter = { _id: new ObjectId(id) };
+//   const updateDoc = {
+//     $inc: {
+//       availableSeats: -1
+//     }
+//   };
+
+//   try {
+//     const result = await classesCollection.updateOne(filter, updateDoc);
+//     if (result.modifiedCount === 1) {
+//       res.send({ success: true });
+//     } else {
+//       res.status(404).send({ success: false, message: 'Class not found' });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send({ success: false, message: 'Internal server error' });
+//   }
+// });
 
       
       app.post('/create-payment-intent', verifyJWT, async (req, res) => {
