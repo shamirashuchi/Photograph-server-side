@@ -254,7 +254,8 @@ async function run() {
       const filter = { _id: new ObjectId(id) };
       const updateDoc = {
         $inc: {
-          availableSeats:-1
+          availableSeats:-1,
+          numStudents:+1
         },
       };
 
@@ -306,15 +307,30 @@ async function run() {
   
   
       // payment related api
+    // app.post('/payments/:id', verifyJWT, async (req, res) => {
+    //   const payment = req.body;
+    //   const insertResult = await paymentCollection.insertOne(payment);
+
+    //   const query = { _id: { $in: payment.SelectedItems.map(id => new ObjectId(id)) } }
+    //   const deleteResult = await selectedCollection.deleteMany(query)
+
+    //   res.send({ insertResult, deleteResult });
+    // })
+
+
     app.post('/payments', verifyJWT, async (req, res) => {
       const payment = req.body;
+      console.log(req.body);
       const insertResult = await paymentCollection.insertOne(payment);
-
-      const query = { _id: { $in: payment.SelectedItems.map(id => new ObjectId(id)) } }
-      const deleteResult = await selectedCollection.deleteMany(query)
-
+    
+      const itemId = req.body.id;
+      const query = { _id: new ObjectId(itemId) };
+      const deleteResult = await selectedCollection.deleteOne(query);
+    
       res.send({ insertResult, deleteResult });
-    })
+    });
+    
+    
       
 
     // Send a ping to confirm a successful connection
